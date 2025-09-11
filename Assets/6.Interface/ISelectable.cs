@@ -5,6 +5,5 @@ using UnityEngine;
 public interface ISelectable
 {
     void SetSelected(bool selected);
-    bool IsSelectable { get; }
     Transform GetTransform();
 }

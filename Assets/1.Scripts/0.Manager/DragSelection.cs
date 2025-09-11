@@ -32,7 +32,6 @@ public class DragSelection : MonoBehaviour
         {
             var rect = GetScreenRect(_startPos, _endPos);
             DrawScreenRect(rect, new Color(0.8f, 0.8f, 1f, 0.25f));
-            DrawScreenRectBorder(rect, 2, Color.blue);
         }
     }
 
@@ -52,15 +51,6 @@ public class DragSelection : MonoBehaviour
         GUI.color = color;
         GUI.DrawTexture(rect, Texture2D.whiteTexture);
         GUI.color = Color.white;
-    }
-
-    // 직사각형 테두리
-    void DrawScreenRectBorder(Rect rect, float thickness, Color color)
-    {
-        DrawScreenRect(new Rect(rect.xMin, rect.yMin, rect.width, thickness), color); // 상단
-        DrawScreenRect(new Rect(rect.xMin, rect.yMax - thickness, rect.width, thickness), color); // 하단
-        DrawScreenRect(new Rect(rect.xMin, rect.yMin, thickness, rect.height), color); // 왼쪽
-        DrawScreenRect(new Rect(rect.xMax - thickness, rect.yMin, thickness, rect.height), color); // 오른쪽
     }
 
     // 유닛 선택

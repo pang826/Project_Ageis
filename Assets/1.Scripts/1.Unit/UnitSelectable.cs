@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class UnitSelectable : MonoBehaviour, ISelectable
 {
-    public bool IsSelectable { get; private set; }
+    public static List<UnitSelectable> AllUnits = new List<UnitSelectable>();
+    private UnitController _controller;
 
+    private void Awake()
+    {
+        _controller = GetComponent<UnitController>();
+    }
+    private void OnEnable() => AllUnits.Add(this);
+    private void OnDisable() => AllUnits.Remove(this);
     public Transform GetTransform()
     {
         return this.transform;
@@ -13,8 +20,6 @@ public class UnitSelectable : MonoBehaviour, ISelectable
 
     public void SetSelected(bool selected)
     {
-        IsSelectable = selected;
-        // 임시 드래그 확인용 색 변경
-        transform.GetChild(0).GetComponent<Renderer>().material.color = selected ? Color.green : Color.white;
+        _controller.SetSelected(selected);
     }
 }
