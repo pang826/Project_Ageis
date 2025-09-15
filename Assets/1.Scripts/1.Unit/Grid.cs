@@ -21,6 +21,7 @@ public class Grid : MonoBehaviour
         CreateGrid();
     }
 
+    public int MaxSize => _gridSizeX + _gridSizeY;
     // 격자 생성 메서드
     private void CreateGrid()
     {
@@ -68,5 +69,17 @@ public class Grid : MonoBehaviour
         }
 
         return neighbors;
+    }
+
+    // 검색 전에 노드 상태 초기화
+    public void ResetNodes()
+    {
+        for (int x = 0; x < _nodes.GetLength(0); x++)
+            for (int y = 0; y < _nodes.GetLength(1); y++)
+            {
+                _nodes[x, y].GCost = int.MaxValue;
+                _nodes[x, y].HCost = 0;
+                _nodes[x, y].Parent = null;
+            }
     }
 }

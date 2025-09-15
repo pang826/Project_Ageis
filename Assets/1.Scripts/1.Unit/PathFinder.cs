@@ -41,6 +41,76 @@ public class PathFinder : MonoBehaviour
         // 경로 정방향으로
         path.Reverse();
 
+        // 디버그용 선그리기 (에디터에서 확인)
+//#if UNITY_EDITOR
+//        for (int i = 0; i < path.Count - 1; i++)
+//            Debug.DrawLine(path[i], path[i + 1], Color.green, 2f);
+//#endif
         return path;
     }
 
+    public List<Vector3> FindPath(Vector3 startPos, Vector3 targetPos)
+    {
+        Node startNode = _grid.GetNodeFromWorldPoint(startPos);
+        Node targetNode = _grid.GetNodeFromWorldPoint(targetPos);
+
+        if(targetNode.Walkable == false)
+        {
+            Debug.LogWarning("타겟 노드로는 못감");
+            return null;
+        }
+
+        // 각 노드 초기화
+        _grid.ResetNodes();
+
+        startNode.GCost = 0;
+        startNode.HCost = GetDistance(startNode, targetNode);
+
+        Heap<Node> openHeap = new Heap<Node>(_grid.MaxSize);
+        HashSet<Node> closeSet = new HashSet<Node>();
+        HashSet<Node> openHash = new HashSet<Node>();
+
+        openHeap.Add(startNode);
+        openHash.Add(startNode);
+
+        while(openHeap.Count > 0)
+        {
+            Node current = openHeap.RemoveFirst();
+            openHash.Remove(current);
+            closeSet.Add(current);
+
+            if(current == targetNode)
+            {
+                RetracePath(startNode, targetNode);
+            }
+
+            foreach(Node neighbor in _grid.GetNeighborNode(current))
+            {
+                if(neighbor.Walkable == false || closeSet.Contains(neighbor)) continue;
+
+                int tentativeG = current.GCost + GetDistance(current, neighbor);
+
+                if(tentativeG < neighbor.GCost)
+                {
+                    neighbor.GCost = tentativeG;
+                    neighbor.HCost = GetDistance(current, neighbor);
+                    neighbor.Parent = current;
+
+                    if(openHash.Contains(neighbor) == false)
+                    {
+                        openHeap.Add(neighbor);
+                        openHash.Add(neighbor);
+                    }
+                    else
+                    {
+                        openHeap.UpdateItem(neighbor);
+                    }
+                }
+            }
+        }
+        
+        return null;
+    }
+
+
+}
