@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class DragSelection : MonoBehaviour
 {
+    public List<UnitController> SelectedUnits = new List<UnitController>();
+
     private Vector3 _startPos;
     private Vector3 _endPos;
     private bool _isDragging;
 
-    void Update()
+    void Update()   
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -58,17 +60,33 @@ public class DragSelection : MonoBehaviour
     {
         Rect selectRect = GetScreenRect(_startPos, _endPos);
 
-        foreach (var unit in FindObjectsOfType<UnitSelectable>())
-        {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(unit.transform.position);
+        // 기존 선택 해제
+        foreach (var unit in SelectedUnits)
+            unit.SetSelected(false);
 
-            if (selectRect.Contains(new Vector2(screenPos.x, Screen.height - screenPos.y)))
+        SelectedUnits.Clear();
+        // 드래그 박스를 월드 좌표로 변환
+        Vector3 p1 = Camera.main.ScreenToWorldPoint(new Vector3(_startPos.x, _startPos.y, Camera.main.transform.position.y));
+        Vector3 p2 = Camera.main.ScreenToWorldPoint(new Vector3(_endPos.x, _endPos.y, Camera.main.transform.position.y));
+
+        // 중심의 위치 구하기
+        Vector3 center = (p1 + p2) * 0.5f;
+
+        // 절반 크기의 상자 = (2, 2, 2) 크기의 상자라면 (1, 1, 1)로!
+        Vector3 halfBox = new Vector3(Mathf.Abs(p1.x - p2.x) * 0.5f, 1, Mathf.Abs(p1.z - p2.z) * 0.5f);
+
+        // OverlapBox로 충돌체 검사 (Unit 레이어만)
+        // 첫번째 매개변수 = 중심위치
+        // 두번째 매개변수 = 상자 크기의 절반(Half of the size of the box in each dimension)
+        Collider[] hits = Physics.OverlapBox(center, halfBox, Quaternion.identity, LayerMask.GetMask("Unit"));
+        
+        foreach (var hit in hits)
+        {
+            UnitController unit = hit.GetComponent<UnitController>();
+            if (unit != null)
             {
+                SelectedUnits.Add(unit);
                 unit.SetSelected(true);
-            }
-            else
-            {
-                unit.SetSelected(false);
             }
         }
     }
