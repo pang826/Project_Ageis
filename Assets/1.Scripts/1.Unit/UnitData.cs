@@ -10,5 +10,4 @@ public class UnitData : ScriptableObject
     public int Hp;
     public int Damage;
     public float MoveSpeed;
-    public bool IsSelectable;
 }
