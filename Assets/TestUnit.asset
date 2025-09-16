@@ -15,5 +15,5 @@ MonoBehaviour:
   Name: Test
   Hp: 10
   Damage: 1
-  MoveSpeed: 3
+  MoveSpeed: 30
   IsSelectable: 1

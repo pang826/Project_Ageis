@@ -42,10 +42,10 @@ public class PathFinder : MonoBehaviour
         path.Reverse();
 
         // 디버그용 선그리기 (에디터에서 확인)
-//#if UNITY_EDITOR
-//        for (int i = 0; i < path.Count - 1; i++)
-//            Debug.DrawLine(path[i], path[i + 1], Color.green, 2f);
-//#endif
+#if UNITY_EDITOR
+        for (int i = 0; i < path.Count - 1; i++)
+            Debug.DrawLine(path[i], path[i + 1], Color.green, 2f);
+#endif
         return path;
     }
 
@@ -81,7 +81,7 @@ public class PathFinder : MonoBehaviour
 
             if(current == targetNode)
             {
-                RetracePath(startNode, targetNode);
+                return RetracePath(startNode, targetNode);
             }
 
             foreach(Node neighbor in _grid.GetNeighborNode(current))

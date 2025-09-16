@@ -21,7 +21,7 @@ public class Grid : MonoBehaviour
         CreateGrid();
     }
 
-    public int MaxSize => _gridSizeX + _gridSizeY;
+    public int MaxSize => _gridSizeX * _gridSizeY;
     // 격자 생성 메서드
     private void CreateGrid()
     {
@@ -42,9 +42,9 @@ public class Grid : MonoBehaviour
     public Node GetNodeFromWorldPoint(Vector3 worldPoint)
     {
         float percentX = Mathf.Clamp01((worldPoint.x - _worldBottomLeft.x) / _gridSizeX);
-        float percentY = Mathf.Clamp01((worldPoint.y - _worldBottomLeft.y) / _gridSizeY);
-        int x = Mathf.RoundToInt((_gridSizeX - 1) * percentX);
-        int y = Mathf.RoundToInt((_gridSizeY - 1) * percentY);
+        float percentZ = Mathf.Clamp01((worldPoint.z - _worldBottomLeft.z) / _gridSizeY);
+        int x = Mathf.FloorToInt((_gridSizeX - 1) * percentX);
+        int y = Mathf.FloorToInt((_gridSizeY - 1) * percentZ);
         return _nodes[x, y];
     }
 
