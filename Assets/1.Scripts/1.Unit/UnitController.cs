@@ -9,6 +9,7 @@ public class UnitController : MonoBehaviour
     [SerializeField] private UnitView _unitView;
     private PathFinder _pathFinder;
 
+    private bool _isSelected;
     private List<Vector3> _currentPath;
     private int _pathIndex = 0;
     private LayerMask _groundMask;
@@ -23,7 +24,7 @@ public class UnitController : MonoBehaviour
     private void Update()
     {
         // 경로 지정
-        if (Input.GetMouseButtonDown(1) && _unitData.IsSelectable)
+        if (Input.GetMouseButtonDown(1) && _isSelected)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
@@ -32,14 +33,12 @@ public class UnitController : MonoBehaviour
                 Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 2f);
                 Vector3 target = hit.point;
                 _currentPath = _pathFinder.FindPath(transform.position, target);
-                foreach (var p in _currentPath)
-                    Debug.Log(p);
                 _pathIndex = 0;
             }
         }
 
         // 경로 따라 이동
-        if(_unitData.IsSelectable && _currentPath != null && _pathIndex < _currentPath.Count)
+        if(_isSelected && _currentPath != null && _pathIndex < _currentPath.Count)
         {
             Vector3 targetPos = _currentPath[_pathIndex];
             transform.position = Vector3.MoveTowards(transform.position, targetPos, _unitData.MoveSpeed * Time.deltaTime);
@@ -51,7 +50,7 @@ public class UnitController : MonoBehaviour
     }
     public void SetSelected(bool selected)
     {
-        _unitData.IsSelectable = selected;
+        _isSelected = selected;
         _unitView.SetSelected(selected);
     }
 
