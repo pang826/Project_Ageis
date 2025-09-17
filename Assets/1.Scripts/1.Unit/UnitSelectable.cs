@@ -4,22 +4,20 @@ using UnityEngine;
 
 public class UnitSelectable : MonoBehaviour, ISelectable
 {
-    public static List<UnitSelectable> AllUnits = new List<UnitSelectable>();
     private UnitController _controller;
 
     private void Awake()
     {
         _controller = GetComponent<UnitController>();
     }
-    private void OnEnable() => AllUnits.Add(this);
-    private void OnDisable() => AllUnits.Remove(this);
-    public Transform GetTransform()
-    {
-        return this.transform;
-    }
+    public Transform GetTransform() => this.transform;
 
     public void SetSelected(bool selected)
     {
         _controller.SetSelected(selected);
+    }
+    public void SetDestination(Vector3 target)
+    {
+        _controller.SetDestination(target);
     }
 }

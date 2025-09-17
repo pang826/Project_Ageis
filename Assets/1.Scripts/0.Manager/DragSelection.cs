@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class DragSelection : MonoBehaviour
 {
-    public List<UnitController> SelectedUnits = new List<UnitController>();
+    public List<UnitSelectable> SelectedUnits = new List<UnitSelectable>();
 
     private Vector3 _startPos;
     private Vector3 _endPos;
@@ -82,7 +82,7 @@ public class DragSelection : MonoBehaviour
         
         foreach (var hit in hits)
         {
-            UnitController unit = hit.GetComponent<UnitController>();
+            UnitSelectable unit = hit.GetComponent<UnitSelectable>();
             if (unit != null)
             {
                 SelectedUnits.Add(unit);

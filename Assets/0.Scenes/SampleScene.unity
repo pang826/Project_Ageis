@@ -341,7 +341,7 @@ MonoBehaviour:
   _zoomSpeed: 30
   _minFov: 20
   _maxFov: 80
-  _scrollSpeed: 10
+  _scrollSpeed: 50
   _edgeSize: 30
 --- !u!114 &330585549
 MonoBehaviour:
